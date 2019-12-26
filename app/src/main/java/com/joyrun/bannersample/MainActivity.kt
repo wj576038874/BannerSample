@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
             d
         )
 
-        joyRunBanner.setScrollDuration(LinearInterpolator(),500)
+        joyRunBanner.setScrollDuration(LinearInterpolator() , 800)
 
 //        joyRunBanner.setLoop(false)
 

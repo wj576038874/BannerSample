@@ -13,6 +13,7 @@
         <attr name="autoPlay" format="boolean"/>
         <attr name="autoPlayTime" format="integer|reference"/>
         <attr name="border_radius" format="dimension" />
+        <attr name="pageChangeDuration" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="UltraViewPager">
