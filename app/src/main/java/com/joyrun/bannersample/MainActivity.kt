@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.LinearInterpolator
+import android.view.animation.*
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -71,6 +71,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this , Main2Activity::class.java))
         }
 
+        btn_stop.setOnClickListener {
+            joyRunBanner.setScrollDuration(DecelerateInterpolator() , 600)
+        }
+
         val d = listOf(
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665548&di=efe0920c74ffae46d80bf9302e0ff67c&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fb151f8198618367aa7f3cc7424738bd4b31ce525.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=7f4e5dac527d55168d7f29d9aeaad01b&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535bdaac29e9aef76c6a6ef63c2.jpg",
@@ -78,11 +82,11 @@ class MainActivity : AppCompatActivity() {
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665546&di=6d699d47ec867d1d135c5bdb4daacbcc&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F21a4462309f7905296a7578106f3d7ca7acbd5d0.jpg")
 
         btn_refresh.setOnClickListener {
-            joyRunBanner.refreshBannerData(listOf(
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=7f4e5dac527d55168d7f29d9aeaad01b&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535bdaac29e9aef76c6a6ef63c2.jpg",
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=680286202b1d5e1423298e0cfb392568&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F810a19d8bc3eb1354c94a704ac1ea8d3fd1f4439.jpg"
-            ))
-
+//            joyRunBanner.refreshBannerData(listOf(
+//                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=7f4e5dac527d55168d7f29d9aeaad01b&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535bdaac29e9aef76c6a6ef63c2.jpg",
+//                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=680286202b1d5e1423298e0cfb392568&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F810a19d8bc3eb1354c94a704ac1ea8d3fd1f4439.jpg"
+//            ))
+            joyRunBanner.setScrollDuration(AccelerateInterpolator(),600)
         }
 
 //        JoyRunBanner.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -110,12 +114,13 @@ class MainActivity : AppCompatActivity() {
             .setNormalResId(R.drawable.ic_dot_normal)
             .setIndicatorPadding(10)
             .build()
+//        joyRunBanner.setScrollDuration(600)
 
         joyRunBanner.setBannerData(R.layout.my_banner_item ,
             d
         )
 
-        joyRunBanner.setScrollDuration(LinearInterpolator() , 800)
+
 
 //        joyRunBanner.setLoop(false)
 

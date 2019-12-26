@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.Interpolator
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
@@ -62,6 +63,11 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
     private var mPageChangeDuration = 0
 
+    /**
+     * 默认动画插值器 在动画开始的地方快然后慢
+     */
+    private var mInterpolator:Interpolator = DecelerateInterpolator()
+
     private var mData = listOf<T>()
 
     private var mTransformer = Transformer.Default
@@ -88,6 +94,8 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         LayoutInflater.from(mContext).inflate(R.layout.joyrun_banner_layout, this)
 
         initAttrs(context, attrs)
+
+        setScrollDuration(mPageChangeDuration)
     }
 
     /**
@@ -169,7 +177,6 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
             setPageTransformer(false, BasePageTransformer.getPageTransformer(mTransformer))
             bannerViewPager.setOnPageChangeListener(this@JoyRunBanner)
         }
-        setScrollDuration(mPageChangeDuration)
         //大于1循环
         setLoop(data.size > 1)
         //大于1并且showPointContainer是true显示指示点
@@ -206,7 +213,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     fun setScrollDuration(duration: Int) {
         this.mPageChangeDuration = duration
         if (mPageChangeDuration == 0)return
-        bannerViewPager.setScrollDuration(mPageChangeDuration)
+        bannerViewPager.setScrollDuration(mInterpolator, mPageChangeDuration)
     }
 
 
@@ -225,7 +232,8 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     fun setScrollDuration(interpolator: Interpolator, duration: Int) {
         this.mPageChangeDuration = duration
         if (mPageChangeDuration == 0)return
-        bannerViewPager.setScrollDuration(interpolator, duration)
+        this.mInterpolator = interpolator
+        bannerViewPager.setScrollDuration(mInterpolator, mPageChangeDuration)
     }
 
     /**

@@ -35,6 +35,7 @@ class MyAdapter(private val mData:List<Item>) : RecyclerView.Adapter<RecyclerVie
                 bannerHolder.banner.setBannerLoadAdapter { joyRunBanner, url, view, position ->
                     Glide.with(bannerHolder.itemView.context).load(url).into(view as ImageView)
                 }
+                bannerHolder.banner.setScrollDuration(600)
                 bannerHolder.banner.setBannerData(bannerItem.datas)
             }
             else -> {
