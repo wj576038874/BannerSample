@@ -13,11 +13,9 @@
         app:pointNormal="@drawable/my_shape_point_normal"
         app:pointSelected="@drawable/my_shape_point_selected"
         app:autoPlayTime="2000"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
+        android:background="@color/colorPrimary"
         app:pointsLocation="CENTER"
-        app:border_radius="10dp"
         android:layout_height="160dp"/>
 
     <Button
@@ -40,6 +38,20 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:text="开始"
+        android:layout_marginTop="20dp"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:id="@+id/jiami"
+        android:layout_width="match_parent"
+        android:text="加密"
+        android:layout_marginTop="20dp"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:id="@+id/jiemi"
+        android:layout_width="match_parent"
+        android:text="解密"
         android:layout_marginTop="20dp"
         android:layout_height="50dp"/>
 

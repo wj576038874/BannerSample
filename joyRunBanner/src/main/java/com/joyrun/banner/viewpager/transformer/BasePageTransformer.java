@@ -33,7 +33,7 @@ public abstract class BasePageTransformer implements ViewPager.PageTransformer {
 
     public abstract void handleRightPage(View view, float position);
 
-    public static BasePageTransformer getPageTransformer(Transformer effect) {
+    public static ViewPager.PageTransformer getPageTransformer(Transformer effect) {
         switch (effect) {
             case Alpha:
                 return new AlphaPageTransformer();
@@ -58,7 +58,7 @@ public abstract class BasePageTransformer implements ViewPager.PageTransformer {
             case Zoom:
                 return new ZoomPageTransformer();
             case Scale:
-                return new ScalePageTransformer();
+                return new UltraScaleTransformer();
             default:
                 return new DefaultPageTransformer();
         }

@@ -1,6 +1,8 @@
 package com.joyrun.bannersample
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,13 @@ class Main2Activity : AppCompatActivity(){
         setContentView(R.layout.activity_main2)
 
         rv.layoutManager = LinearLayoutManager(this)
+
+
+        buttonPanel.setOnClickListener {
+            val intent = Intent(this , MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
 
         val banners = Item.BannerItem(listOf(
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665548&di=efe0920c74ffae46d80bf9302e0ff67c&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fb151f8198618367aa7f3cc7424738bd4b31ce525.jpg",
@@ -40,5 +49,34 @@ class Main2Activity : AppCompatActivity(){
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.e("asd" , "Main2Activity onStart")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("asd" , "Main2Activity onDestroy")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e("asd" , "Main2Activity onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("asd" , "Main2Activity onStop")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.e("asd" , "Main2Activity onRestart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("asd" , "Main2Activity onResume")
+    }
 
 }

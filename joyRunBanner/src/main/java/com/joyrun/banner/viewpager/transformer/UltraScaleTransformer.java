@@ -34,7 +34,7 @@ import androidx.viewpager.widget.ViewPager;
  * Created by mikeafc on 15/12/3.
  */
 public class UltraScaleTransformer implements ViewPager.PageTransformer {
-    private static final float MIN_SCALE = 0.75f;
+    private static final float MIN_SCALE = 0.80f;
 
     @Override
     public void transformPage(View page, float position) {

@@ -42,8 +42,8 @@ public class TimerHandler extends Handler {
 
     SparseIntArray specialInterval;
     long interval;
-    boolean isStopped = true;
-    TimerHandlerListener listener;
+    public boolean isStopped = true;
+    public TimerHandlerListener listener;
 
     static final int MSG_TIMER_ID = 87108;
 

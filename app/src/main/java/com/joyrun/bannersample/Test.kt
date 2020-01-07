@@ -12,12 +12,12 @@ import java.util.*
 fun main() {
 
     val list = listOf(
-        Advert(1, "111"),
-        Advert(3, "333"),
-        Advert(4, "444"),
-        Advert(2, "222"),
-        Advert(6, "666"),
-        Advert(5, "555")
+        Advert(1, "111", 0),
+        Advert(3, "333", 1),
+        Advert(4, "444", 2),
+        Advert(2, "222", 1),
+        Advert(6, "666", 0),
+        Advert(5, "555", 0)
     )
 
 
@@ -26,19 +26,18 @@ fun main() {
 
 }
 
-class AdvertComparable : Comparator<Advert>{
-
+class AdvertComparable : Comparator<Advert> {
 
     override fun compare(o1: Advert, o2: Advert): Int {
         return when {
             o1.id > o2.id -> {
-                1
+                -1
             }
             o1.id == o2.id -> {
-                0
+                return if (o1.randomIndex > o2.randomIndex) -1 else 1
             }
             else -> {
-                -1
+                1
             }
         }
 
@@ -46,5 +45,29 @@ class AdvertComparable : Comparator<Advert>{
 
 }
 
+class AdvertComparable2 : Comparator<Advert> {
 
-data class Advert(val id: Int, val title: String)
+
+    override fun compare(o1: Advert, o2: Advert): Int {
+        return when {
+            o1.randomIndex > o2.randomIndex -> {
+                -1
+            }
+            o1.randomIndex == o2.randomIndex -> {
+                0
+            }
+            else -> {
+                1
+            }
+        }
+    }
+}
+
+
+data class Advert(val id: Int, val title: String, val businessType: Int) {
+    var randomIndex: Int = 0
+
+    override fun toString(): String {
+        return "Advert(id=$id, title=$title, businessType=$businessType , randomIndex = $randomIndex)"
+    }
+}

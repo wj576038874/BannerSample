@@ -14,6 +14,7 @@ import androidx.annotation.LayoutRes
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.joyrun.banner.viewpager.IUltraIndicatorBuilder
+import com.joyrun.banner.viewpager.PageStyle
 import com.joyrun.banner.viewpager.UltraViewPager
 import com.joyrun.banner.viewpager.transformer.BasePageTransformer
 import com.joyrun.banner.viewpager.transformer.Transformer
@@ -72,6 +73,9 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
     private var mTransformer = Transformer.Default
 
+    private var mPageStyle = PageStyle.DEFAULT
+
+    private var mItemViewPadding = 0f
 
     private var mBannerLoadAdapter: ((joyRunBanner: JoyRunBanner<T>, data: T, itemView: View, position: Int) -> Unit)? =
         null
@@ -174,6 +178,23 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         this.mData = data
         bannerViewPager.apply {
             adapter = BannerPageAdapter()
+            when(mPageStyle){
+                PageStyle.MULTI_PAGE ->  {
+                    bannerViewPager.setMultiScreen(0.9f)
+                    mItemViewPadding/=2
+                }
+                PageStyle.MULTI_PAGE_SCALE -> {
+                    bannerViewPager.setMultiScreen(0.8f)
+                    mTransformer = Transformer.Scale
+                }
+                PageStyle.MAGIN_PAGE -> {
+                    bannerViewPager.setItemMargin(dp2px(mContext , mItemViewPadding),0,dp2px(mContext , mItemViewPadding),0)
+                }
+                PageStyle.DEFAULT ->{
+
+                }
+            }
+
             setPageTransformer(false, BasePageTransformer.getPageTransformer(mTransformer))
             bannerViewPager.setOnPageChangeListener(this@JoyRunBanner)
         }
@@ -191,6 +212,20 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     fun setBannerData(data: List<T>, transformer: Transformer) {
         this.mTransformer = transformer
         setBannerData(data)
+    }
+
+
+    fun setTransformer(transformer: Transformer){
+        this.mTransformer = transformer
+    }
+
+    fun setPageStyle(pageStyle: PageStyle){
+        this.mPageStyle = pageStyle
+    }
+
+    fun setPageStyle(pageStyle: PageStyle,itemViewSpacing:Float){
+        this.mPageStyle = pageStyle
+        this.mItemViewPadding = itemViewSpacing
     }
 
     /**
@@ -251,6 +286,14 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         bannerViewPager.setInfiniteLoop(isLoop)
     }
 
+    fun stopPlay(){
+        bannerViewPager.stopTimer()
+    }
+
+    fun startPlay(){
+        bannerViewPager.startTimer()
+    }
+
 
     fun getViewPager() = bannerViewPager
 
@@ -288,7 +331,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val itemView = LayoutInflater.from(container.context)
                 .inflate(mBannerLayoutRes, container, false)
-
+            itemView.setPadding(dp2px(mContext , mItemViewPadding),0,dp2px(mContext , mItemViewPadding),0)
             itemView.setOnClickListener {
                 mOnBannerItemClickListener?.invoke(
                     this@JoyRunBanner,

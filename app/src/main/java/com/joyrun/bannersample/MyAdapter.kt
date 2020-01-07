@@ -1,5 +1,6 @@
 package com.joyrun.bannersample
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,9 @@ class MyAdapter(private val mData:List<Item>) : RecyclerView.Adapter<RecyclerVie
                 val bannerItem = mData[position] as Item.BannerItem
                 bannerHolder.banner.setBannerLoadAdapter { joyRunBanner, url, view, position ->
                     Glide.with(bannerHolder.itemView.context).load(url).into(view as ImageView)
+                }
+                bannerHolder.banner.setOnBannerItemClickListener { joyRunBanner, data, itemView, position ->
+                    itemView.context.startActivity(Intent(itemView.context , MainActivity::class.java))
                 }
                 bannerHolder.banner.setScrollDuration(500)
                 bannerHolder.banner.setBannerData(bannerItem.datas)

@@ -526,7 +526,7 @@ public class UltraViewPager extends RelativeLayout implements IUltraViewPagerFea
         }
     }
 
-    private void startTimer() {
+    public void startTimer() {
         if (timer == null || viewPager == null || !timer.isStopped) {
             return;
         }
@@ -536,7 +536,7 @@ public class UltraViewPager extends RelativeLayout implements IUltraViewPagerFea
         timer.isStopped = false;
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         if (timer == null || viewPager == null || timer.isStopped) {
             return;
         }
