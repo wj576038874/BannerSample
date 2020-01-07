@@ -67,7 +67,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     /**
      * 默认动画插值器 在动画开始的地方快然后慢
      */
-    private var mInterpolator:Interpolator = DecelerateInterpolator()
+    private var mInterpolator: Interpolator = DecelerateInterpolator()
 
     private var mData = listOf<T>()
 
@@ -121,7 +121,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         userInputEnabled = typedArray.getBoolean(R.styleable.JoyRunBanner_userInputEnabled, true)
         autoPlay = typedArray.getBoolean(R.styleable.JoyRunBanner_autoPlay, true)
         autoPlayTime = typedArray.getInteger(R.styleable.JoyRunBanner_autoPlayTime, 5000)
-        mPageChangeDuration = typedArray.getInteger(R.styleable.JoyRunBanner_pageChangeDuration , 0)
+        mPageChangeDuration = typedArray.getInteger(R.styleable.JoyRunBanner_pageChangeDuration, 0)
         setRadius(typedArray.getDimension(R.styleable.JoyRunBanner_border_radius, 0f))
         typedArray.recycle()
     }
@@ -178,21 +178,25 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         this.mData = data
         bannerViewPager.apply {
             adapter = BannerPageAdapter()
-            when(mPageStyle){
-                PageStyle.MULTI_PAGE ->  {
+            when (mPageStyle) {
+                PageStyle.MULTI_PAGE -> {
                     bannerViewPager.setMultiScreen(0.9f)
-                    mItemViewPadding/=2
+                    mItemViewPadding /= 2
+
                 }
                 PageStyle.MULTI_PAGE_SCALE -> {
                     bannerViewPager.setMultiScreen(0.8f)
                     mTransformer = Transformer.Scale
                 }
                 PageStyle.MAGIN_PAGE -> {
-                    bannerViewPager.setItemMargin(dp2px(mContext , mItemViewPadding),0,dp2px(mContext , mItemViewPadding),0)
+                    bannerViewPager.setItemMargin(
+                        dp2px(mContext, mItemViewPadding),
+                        0,
+                        dp2px(mContext, mItemViewPadding),
+                        0
+                    )
                 }
-                PageStyle.DEFAULT ->{
-
-                }
+                PageStyle.DEFAULT -> { }
             }
 
             setPageTransformer(false, BasePageTransformer.getPageTransformer(mTransformer))
@@ -215,16 +219,17 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     }
 
 
-    fun setTransformer(transformer: Transformer){
+    fun setTransformer(transformer: Transformer) {
         this.mTransformer = transformer
     }
 
-    fun setPageStyle(pageStyle: PageStyle){
+    fun setPageStyle(pageStyle: PageStyle) {
+        mTransformer = Transformer.Default
         this.mPageStyle = pageStyle
     }
 
-    fun setPageStyle(pageStyle: PageStyle,itemViewSpacing:Float){
-        this.mPageStyle = pageStyle
+    fun setPageStyle(pageStyle: PageStyle, itemViewSpacing: Float) {
+        setPageStyle(pageStyle)
         this.mItemViewPadding = itemViewSpacing
     }
 
@@ -247,7 +252,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
      */
     fun setScrollDuration(duration: Int) {
         this.mPageChangeDuration = duration
-        if (mPageChangeDuration == 0)return
+        if (mPageChangeDuration == 0) return
         bannerViewPager.setScrollDuration(mInterpolator, mPageChangeDuration)
     }
 
@@ -266,7 +271,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
      */
     fun setScrollDuration(interpolator: Interpolator, duration: Int) {
         this.mPageChangeDuration = duration
-        if (mPageChangeDuration == 0)return
+        if (mPageChangeDuration == 0) return
         this.mInterpolator = interpolator
         bannerViewPager.setScrollDuration(mInterpolator, mPageChangeDuration)
     }
@@ -286,11 +291,11 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         bannerViewPager.setInfiniteLoop(isLoop)
     }
 
-    fun stopPlay(){
+    fun stopPlay() {
         bannerViewPager.stopTimer()
     }
 
-    fun startPlay(){
+    fun startPlay() {
         bannerViewPager.startTimer()
     }
 
@@ -331,7 +336,14 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val itemView = LayoutInflater.from(container.context)
                 .inflate(mBannerLayoutRes, container, false)
-            itemView.setPadding(dp2px(mContext , mItemViewPadding),0,dp2px(mContext , mItemViewPadding),0)
+            if (mPageStyle == PageStyle.MULTI_PAGE) {
+                itemView.setPadding(
+                    dp2px(mContext, mItemViewPadding),
+                    0,
+                    dp2px(mContext, mItemViewPadding),
+                    0
+                )
+            }
             itemView.setOnClickListener {
                 mOnBannerItemClickListener?.invoke(
                     this@JoyRunBanner,

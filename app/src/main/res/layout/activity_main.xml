@@ -42,16 +42,23 @@
         android:layout_height="50dp"/>
 
     <Button
-        android:id="@+id/jiami"
+        android:id="@+id/mulit_page"
         android:layout_width="match_parent"
-        android:text="加密"
+        android:text="mulit_page"
         android:layout_marginTop="20dp"
         android:layout_height="50dp"/>
 
     <Button
-        android:id="@+id/jiemi"
+        android:id="@+id/mulit_page_scale"
         android:layout_width="match_parent"
-        android:text="解密"
+        android:text="mulit_page_scale"
+        android:layout_marginTop="20dp"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:id="@+id/mulit_maggin_page"
+        android:layout_width="match_parent"
+        android:text="mulit_maggin_page"
         android:layout_marginTop="20dp"
         android:layout_height="50dp"/>
 

@@ -57,22 +57,10 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity , position.toString()+bannerItem , Toast.LENGTH_SHORT).show()
         }
 
-        val s = """
-            {"allcalorie":247142,"allmeter":3976,"allpo":14,"allsecond":3694,"birthday":"19940315","birthdayStr":"1994-03-15 00:00:00","cell":"86-15012551396","displayName":"可能否","faceurl":"http://linked-runner-upyun.thejoyrun.com/linked-runner/u_92838554_avatar_191116_2342116082.jpg","gender":1,"height":175,"id":0,"introduction":"","lastLoginInfoKeyIdV2":"","lastLoginType":"username","logtime":1577945688,"mail":"","maxContinuousWeeks":3,"name":"可能否","nameWithRemark":"可能否","nick":"可能否","pwd":"","qqToken":"","qqopenid":"","regtime":1571630947,"remark":"","runDays":4,"sid":"3bcb02d99ecc8faa33e26317aff0a3d3","uid":92838554,"userrunlevel":"J2","verContent":"","verType":0,"vip":false,"vipDrawableRes":0,"weiboToken":"","weibo_uid":"","weight":60,"weixinToken":"","weixinopenid":"","year":1994}
-        """.trimIndent()
-        jiami.setOnClickListener {
 
+        btn_stop.setOnClickListener {
+            JoyRunBanner.stopPlay()
         }
-
-        jiemi.setOnClickListener {
-            startActivity(Intent(this , ScrollActivity::class.java))
-        }
-
-
-
-//        btn_stop.setOnClickListener {
-//            JoyRunBanner.stopAutoPlay()
-//        }
 //
         btn_start.setOnClickListener {
 //            val bitmap = BitmapFactory.decodeResource(resources ,R.drawable.ic_launcher_background)
@@ -88,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             joyRunBanner.getViewPager().stopTimer()
         }
 
-        val d = listOf(
+        val data = listOf(
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665548&di=efe0920c74ffae46d80bf9302e0ff67c&imgtype=0&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Fb151f8198618367aa7f3cc7424738bd4b31ce525.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=7f4e5dac527d55168d7f29d9aeaad01b&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535bdaac29e9aef76c6a6ef63c2.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=680286202b1d5e1423298e0cfb392568&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F810a19d8bc3eb1354c94a704ac1ea8d3fd1f4439.jpg",
@@ -96,8 +84,9 @@ class MainActivity : AppCompatActivity() {
 
         btn_refresh.setOnClickListener {
             joyRunBanner.refreshBannerData(listOf(
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=7f4e5dac527d55168d7f29d9aeaad01b&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535bdaac29e9aef76c6a6ef63c2.jpg",
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576754665547&di=680286202b1d5e1423298e0cfb392568&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F810a19d8bc3eb1354c94a704ac1ea8d3fd1f4439.jpg"
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1578397987333&di=49a0e58e716879f19562c57bbe26981a&imgtype=0&src=http%3A%2F%2Ft8.baidu.com%2Fit%2Fu%3D2247852322%2C986532796%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D1280%26h%3D853",
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1578397987331&di=706d56b72ad15ae5b0a6c49787e55335&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D583874135%2C70653437%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D3607%26h%3D2408",
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1578398034097&di=4d7bdc1390087488326fae46167f2378&imgtype=0&src=http%3A%2F%2Ft8.baidu.com%2Fit%2Fu%3D2983382668%2C1612769941%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D1280%26h%3D854"
             ))
         }
 
@@ -109,12 +98,29 @@ class MainActivity : AppCompatActivity() {
             .setIndicatorPadding(10)
             .build()
         joyRunBanner.setScrollDuration(500)
-        joyRunBanner.setPageStyle(PageStyle.MULTI_PAGE_SCALE )
-        joyRunBanner.setBannerData(R.layout.my_banner_item ,
-            d
-        )
+        joyRunBanner.setPageStyle(PageStyle.MULTI_PAGE , 16f)
+        joyRunBanner.setBannerData(R.layout.my_banner_item , data)
 
 //        joyRunBanner.setLoop(false)
+
+
+        mulit_page.setOnClickListener {
+            joyRunBanner.setScrollDuration(500)
+            joyRunBanner.setPageStyle(PageStyle.MULTI_PAGE,16f)
+            joyRunBanner.setBannerData(R.layout.my_banner_item , data)
+        }
+
+        mulit_page_scale.setOnClickListener {
+            joyRunBanner.setScrollDuration(500)
+            joyRunBanner.setPageStyle(PageStyle.MULTI_PAGE_SCALE)
+            joyRunBanner.setBannerData(R.layout.my_banner_item , data)
+        }
+
+        mulit_maggin_page.setOnClickListener {
+            joyRunBanner.setScrollDuration(500)
+            joyRunBanner.setPageStyle(PageStyle.MAGIN_PAGE , 16f)
+            joyRunBanner.setBannerData(R.layout.my_banner_item , data)
+        }
 
         joyRunBanner.setOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
