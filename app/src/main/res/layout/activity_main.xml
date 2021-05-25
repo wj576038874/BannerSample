@@ -13,10 +13,21 @@
         app:pointNormal="@drawable/my_shape_point_normal"
         app:pointSelected="@drawable/my_shape_point_selected"
         app:autoPlayTime="2000"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
+        android:layout_margin="16dp"
         app:pointsLocation="CENTER"
-        android:layout_height="160dp"/>
+        app:border_radius="10dp"
+        app:enableLoop="false"
+        app:autoPlay="false"
+        android:layout_height="200dp"
+        app:showPointContainer="false"/>
+
+
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
 
     <Button
         android:id="@+id/btn_refresh"

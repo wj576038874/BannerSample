@@ -31,8 +31,8 @@ class MyAdapter(private val mData:List<Item>) : RecyclerView.Adapter<RecyclerVie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(getItemViewType(position)){
             0 -> {
-                val bannerHolder = holder as BannerHolder
                 val bannerItem = mData[position] as Item.BannerItem
+                val bannerHolder = holder as BannerHolder
                 bannerHolder.banner.setBannerLoadAdapter { joyRunBanner, url, view, position ->
                     Glide.with(bannerHolder.itemView.context).load(url).into(view as ImageView)
                 }

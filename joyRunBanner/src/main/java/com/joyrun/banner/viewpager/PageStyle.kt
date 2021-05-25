@@ -8,10 +8,13 @@ package com.joyrun.banner.viewpager
 enum class PageStyle {
     //默认
     DEFAULT,
+
     //多页面
     MULTI_PAGE,
+
     //画廊模式
     MULTI_PAGE_SCALE,
+
     //页面间距
-    MAGIN_PAGE
+    MARGIN_PAGE
 }

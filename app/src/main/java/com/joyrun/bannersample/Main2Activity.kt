@@ -24,8 +24,8 @@ class Main2Activity : AppCompatActivity(){
 
 
         buttonPanel.setOnClickListener {
-            val intent = Intent(this , MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val intent = Intent(this , Main3Activity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
 

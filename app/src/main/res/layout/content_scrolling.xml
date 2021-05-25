@@ -22,6 +22,22 @@
             app:pointsLocation="CENTER"
             android:layout_height="160dp"/>
 
+        <ImageView
+            android:layout_width="100dp"
+            android:id="@+id/imageview"
+            android:scaleType="fitXY"
+            android:layout_height="100dp"/>
+
+        <View
+            android:layout_width="100dp"
+            android:background="@color/colorPrimary"
+            android:layout_height="100dp"/>
+
+        <ImageView
+            android:id="@+id/imageview2"
+            android:layout_width="100dp"
+            android:scaleType="fitXY"
+            android:layout_height="100dp"/>
 
         <Button
             android:id="@+id/btn_next"

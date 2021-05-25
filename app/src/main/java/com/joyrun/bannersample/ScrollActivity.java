@@ -43,14 +43,25 @@ public class ScrollActivity extends AppCompatActivity {
 
     private TimerHandler timer;
 
+    private ImageView imageView;
+    private ImageView imageView2;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_scrolling);
 
         joyRunBanner = findViewById(R.id.banner);
-
+        imageView = findViewById(R.id.imageview);
         scrollView = findViewById(R.id.scrollView);
+        imageView2 = findViewById(R.id.imageview2);
+        Glide.with(this)
+                .load("https://joyrun-activity-upyun.thejoyrun.com/advert/e8e3a3a9b1a64dc08875c779bc4aefe2.gif")
+                .into(imageView);
+
+        Glide.with(this)
+                .load("https://joyrun-activity-upyun.thejoyrun.com/advert/bca35e01de9c44dc89d88e7315a904e4.png")
+                .into(imageView2);
 
         timer = new TimerHandler(mTimerHandlerListener, 3000);
         startTimer();

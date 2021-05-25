@@ -10,10 +10,12 @@
         </attr>
         <attr name="showPointContainer" format="boolean" />
         <attr name="userInputEnabled" format="boolean" />
-        <attr name="autoPlay" format="boolean"/>
-        <attr name="autoPlayTime" format="integer|reference"/>
+        <attr name="autoPlay" format="boolean" />
+        <attr name="enableLoop" format="boolean" />
+        <attr name="autoPlayTime" format="integer|reference" />
         <attr name="border_radius" format="dimension" />
-        <attr name="pageChangeDuration" format="integer"/>
+        <attr name="pageChangeDuration" format="integer" />
+        <attr name="aspect_ratio" format="string" />
     </declare-styleable>
 
     <declare-styleable name="UltraViewPager">

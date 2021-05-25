@@ -35,7 +35,7 @@ class ScrollingActivity : AppCompatActivity() {
 
 
         btn_next.setOnClickListener {
-            joyRunBanner.getViewPager().scrollNextPage()
+            joyRunBanner.viewPager.scrollNextPage()
         }
 
         joyRunBanner.setBannerLoadAdapter { joyRunBanner, data, itemView, position ->

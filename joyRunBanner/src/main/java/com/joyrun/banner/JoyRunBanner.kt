@@ -2,6 +2,7 @@ package com.joyrun.banner
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -28,7 +29,7 @@ import kotlinx.android.synthetic.main.joyrun_banner_layout.view.*
  */
 class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
-    private val mContext: Context
+    private val mContext: Context = context
 
     @DrawableRes
     private var mPointNormal = R.drawable.joyrun_banner_shape_point_normal
@@ -52,17 +53,26 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     private var userInputEnabled = true
 
     /**
+     * 是否循环轮播
+     */
+    private var enableLoop = true
+
+    /**
      * 是否自动轮播 默认true
      */
     private var autoPlay = true
 
     /**
-     * 自动轮播间隔时间默认5000ms
+     * 自动轮播间隔时间默认3000ms
      */
-    private var autoPlayTime = 5000
+    private var autoPlayTime = 3000
 
 
     private var mPageChangeDuration = 0
+
+    private var mAspectRatio: String? = null
+
+    private var mRatio = 0f
 
     /**
      * 默认动画插值器 在动画开始的地方快然后慢
@@ -75,7 +85,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
     private var mPageStyle = PageStyle.DEFAULT
 
-    private var mItemViewPadding = 0f
+    private var mItemViewSpacing = 16f
 
     private var mBannerLoadAdapter: ((joyRunBanner: JoyRunBanner<T>, data: T, itemView: View, position: Int) -> Unit)? =
         null
@@ -94,7 +104,6 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         attrs,
         defStyleAttr
     ) {
-        mContext = context
         LayoutInflater.from(mContext).inflate(R.layout.joyrun_banner_layout, this)
 
         initAttrs(context, attrs)
@@ -118,11 +127,17 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         mPointLocation = typedArray.getInt(R.styleable.JoyRunBanner_pointsLocation, 1)
         showPointContainer =
             typedArray.getBoolean(R.styleable.JoyRunBanner_showPointContainer, true)
+        enableLoop = typedArray.getBoolean(R.styleable.JoyRunBanner_enableLoop, true)
         userInputEnabled = typedArray.getBoolean(R.styleable.JoyRunBanner_userInputEnabled, true)
         autoPlay = typedArray.getBoolean(R.styleable.JoyRunBanner_autoPlay, true)
-        autoPlayTime = typedArray.getInteger(R.styleable.JoyRunBanner_autoPlayTime, 5000)
+        autoPlayTime = typedArray.getInteger(R.styleable.JoyRunBanner_autoPlayTime, autoPlayTime)
         mPageChangeDuration = typedArray.getInteger(R.styleable.JoyRunBanner_pageChangeDuration, 0)
         setRadius(typedArray.getDimension(R.styleable.JoyRunBanner_border_radius, 0f))
+        mAspectRatio = typedArray.getString(R.styleable.JoyRunBanner_aspect_ratio)
+        val ratios = mAspectRatio?.split(":")
+        if (ratios?.size == 2) {
+            mRatio = ratios[1].toFloat() / ratios[0].toFloat()
+        }
         typedArray.recycle()
     }
 
@@ -145,7 +160,7 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
             bannerViewPager.initIndicator()
             bannerViewPager.indicator
                 .setOrientation(UltraViewPager.Orientation.HORIZONTAL)
-                .setMargin(0, 0, 0, dp2px(mContext, 8f))
+                .setMargin(16, 16, 16, 16)
                 .setFocusDrawableId(mPointSelected)
                 .setNormalDrawableId(mPointNormal)
                 .setIndicatorPadding(10)
@@ -177,33 +192,33 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     fun setBannerData(data: List<T>) {
         this.mData = data
         bannerViewPager.apply {
+            //大于1循环
+            setEnableLoop(enableLoop && data.size > 1)
             adapter = BannerPageAdapter()
             when (mPageStyle) {
                 PageStyle.MULTI_PAGE -> {
                     bannerViewPager.setMultiScreen(0.9f)
-                    mItemViewPadding /= 2
-
+                    mItemViewSpacing /= 2
                 }
                 PageStyle.MULTI_PAGE_SCALE -> {
                     bannerViewPager.setMultiScreen(0.8f)
                     mTransformer = Transformer.Scale
                 }
-                PageStyle.MAGIN_PAGE -> {
+                PageStyle.MARGIN_PAGE -> {
                     bannerViewPager.setItemMargin(
-                        dp2px(mContext, mItemViewPadding),
+                        dp2px(mContext, mItemViewSpacing),
                         0,
-                        dp2px(mContext, mItemViewPadding),
+                        dp2px(mContext, mItemViewSpacing),
                         0
                     )
                 }
-                PageStyle.DEFAULT -> { }
-            }
+                PageStyle.DEFAULT -> {
 
+                }
+            }
             setPageTransformer(false, BasePageTransformer.getPageTransformer(mTransformer))
             bannerViewPager.setOnPageChangeListener(this@JoyRunBanner)
         }
-        //大于1循环
-        setLoop(data.size > 1)
         //大于1并且showPointContainer是true显示指示点
         showPoint(data.size > 1 && showPointContainer)
         //autoPlay为true并且大于1自动轮播
@@ -218,19 +233,24 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         setBannerData(data)
     }
 
-
-    fun setTransformer(transformer: Transformer) {
-        this.mTransformer = transformer
-    }
-
+    /**
+     * page style
+     * @see PageStyle
+     * 如果需要item为圆角的haunt
+     * 去除joyrunbanner的圆角 再{#bannerLoadAdapter}自行设置imageview的圆角即可
+     */
     fun setPageStyle(pageStyle: PageStyle) {
         mTransformer = Transformer.Default
         this.mPageStyle = pageStyle
     }
 
-    fun setPageStyle(pageStyle: PageStyle, itemViewSpacing: Float) {
+    /**
+     * @param itemViewSpacing 间距 单位 dp
+     * 针对pageStyle为MULTI_PAGE 和 MARGIN_PAGE 的间距
+     */
+    fun setPageStyle(pageStyle: PageStyle, itemViewSpacing: Int) {
         setPageStyle(pageStyle)
-        this.mItemViewPadding = itemViewSpacing
+        this.mItemViewSpacing = itemViewSpacing.toFloat()
     }
 
     /**
@@ -256,6 +276,19 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
         bannerViewPager.setScrollDuration(mInterpolator, mPageChangeDuration)
     }
 
+    /**
+     * 开始自动轮播
+     */
+    fun startPaly() {
+        bannerViewPager.startTimer()
+    }
+
+    /**
+     * 停止自动轮播
+     */
+    fun stopPlay() {
+        bannerViewPager.stopTimer()
+    }
 
     /**
      * @param interpolator AccelerateDecelerateInterpolator 在动画开始与结束的地方速率改变比较慢，在中间的时候加速
@@ -287,32 +320,33 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
     /**
      * 是否循环轮播 默认'是'
      */
-    fun setLoop(isLoop: Boolean) {
-        bannerViewPager.setInfiniteLoop(isLoop)
+    fun setEnableLoop(enableLoop: Boolean) {
+        bannerViewPager.setInfiniteLoop(enableLoop)
     }
 
-    fun stopPlay() {
-        bannerViewPager.stopTimer()
-    }
+    /**
+     * 获取数据
+     */
+    val data: List<T>
+        get() = mData
 
-    fun startPlay() {
-        bannerViewPager.startTimer()
-    }
-
-
-    fun getViewPager() = bannerViewPager
+    /**
+     * 获取viewpager
+     */
+    val viewPager: UltraViewPager
+        get() = bannerViewPager
 
     /**
      * 设置图片加载器 回到给使用者自行加载，框架不知道广告图片的url具体是哪个字段
      */
-    fun setBannerLoadAdapter(bannerLoadAdapter: (joyRunBanner: JoyRunBanner<T>, data: T, itemView: View, position: Int) -> Unit) {
+    fun setBannerLoadAdapter(bannerLoadAdapter: (joyRunBanner: JoyRunBanner<T>, item: T, itemView: View, position: Int) -> Unit) {
         mBannerLoadAdapter = bannerLoadAdapter
     }
 
     /**
      * 设置banner的点击事件
      */
-    fun setOnBannerItemClickListener(onBannerItemClickListener: (joyRunBanner: JoyRunBanner<T>, data: T, itemView: View, position: Int) -> Unit) {
+    fun setOnBannerItemClickListener(onBannerItemClickListener: (joyRunBanner: JoyRunBanner<T>, item: T, itemView: View, position: Int) -> Unit) {
         mOnBannerItemClickListener = onBannerItemClickListener
     }
 
@@ -324,23 +358,25 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
     private inner class BannerPageAdapter : PagerAdapter() {
 
-        override fun isViewFromObject(view: View, item: Any): Boolean = view === item
+        override fun isViewFromObject(view: View, item: Any): Boolean = view == item
 
         override fun getCount(): Int = mData.size
 
-
         override fun destroyItem(container: ViewGroup, position: Int, item: Any) {
             container.removeView(item as View)
+            Log.e("asd", "destroyItem$position")
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            Log.e("asd", "instantiateItem$position")
             val itemView = LayoutInflater.from(container.context)
                 .inflate(mBannerLayoutRes, container, false)
+            itemView.layerType
             if (mPageStyle == PageStyle.MULTI_PAGE) {
                 itemView.setPadding(
-                    dp2px(mContext, mItemViewPadding),
+                    dp2px(mContext, mItemViewSpacing),
                     0,
-                    dp2px(mContext, mItemViewPadding),
+                    dp2px(mContext, mItemViewSpacing),
                     0
                 )
             }
@@ -383,5 +419,23 @@ class JoyRunBanner<T> : RoundedCornersLayout, ViewPager.OnPageChangeListener {
 
     override fun onPageSelected(position: Int) {
         mOnPageChangeListener?.onPageSelected(bannerViewPager.currentItem)
+    }
+
+    fun setCurrentItem(position: Int, smoothScroll: Boolean = true) {
+        viewPager.setCurrentItem(position, smoothScroll)
+    }
+
+    fun getCurrentItem() = viewPager.currentItem
+
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        if (mRatio > 0) {
+            val heightMeasure =
+                MeasureSpec.makeMeasureSpec((widthSize * mRatio).toInt(), MeasureSpec.EXACTLY)
+            super.onMeasure(widthMeasureSpec, heightMeasure)
+        } else {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        }
     }
 }
