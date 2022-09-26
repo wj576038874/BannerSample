@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     outRect.left = 16
                     outRect.right = 16
                 }
-            }).adapter = bannerAdapter
+            }).setAdapter(bannerAdapter)
 
         bannerAdapter.setNewData(data)
         bannerAdapter2.setNewData(data)
