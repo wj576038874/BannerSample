@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="JoyRunBanner">
-        <attr name="pointNormal" format="reference" />
-        <attr name="pointSelected" format="reference" />
-        <attr name="pointsLocation" format="enum">
-            <enum name="LEFT" value="0" />
-            <enum name="CENTER" value="1" />
-            <enum name="RIGHT" value="2" />
+    <declare-styleable name="JoyrunBanner">
+        <attr name="indicatorPosition">
+            <flag name="top" value="0x30" />
+            <!-- Push object to the bottom of its container, not changing its size. -->
+            <flag name="bottom" value="0x50" />
+            <!-- Push object to the left of its container, not changing its size. -->
+            <flag name="left" value="0x03" />
+            <!-- Push object to the right of its container, not changing its size. -->
+            <flag name="right" value="0x05" />
+            <flag name="center" value="0x11" />
+            <flag name="start" value="0x00800003" />
+            <!-- Push object to the end of its container, not changing its size. -->
+            <flag name="end" value="0x00800005" />
         </attr>
-        <attr name="showPointContainer" format="boolean" />
+        <attr name="indicatorBottomMargin" format="dimension" />
+        <attr name="indicatorTopMargin" format="dimension" />
+        <attr name="indicatorLeftMargin" format="dimension" />
+        <attr name="indicatorRightMargin" format="dimension" />
         <attr name="userInputEnabled" format="boolean" />
         <attr name="autoPlay" format="boolean" />
         <attr name="enableLoop" format="boolean" />
         <attr name="autoPlayTime" format="integer|reference" />
         <attr name="border_radius" format="dimension" />
         <attr name="pageChangeDuration" format="integer" />
+        <!--宽高比-->
         <attr name="aspect_ratio" format="string" />
-    </declare-styleable>
-
-    <declare-styleable name="UltraViewPager">
-        <attr name="upv_autoscroll" format="integer" />
-        <attr name="upv_infiniteloop" format="boolean" />
-        <attr name="upv_ratio" format="float" />
-        <attr name="upv_scrollmode" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-        </attr>
-        <attr name="upv_disablescroll" format="enum">
-            <enum name="none" value="0" />
-            <enum name="backward" value="1" />
-            <enum name="forward" value="2" />
-        </attr>
-        <attr name="upv_multiscreen" format="float" />
-        <attr name="upv_automeasure" format="boolean" />
-        <attr name="upv_itemratio" format="float" />
     </declare-styleable>
 </resources>

@@ -11,7 +11,7 @@ import android.widget.FrameLayout
  * date: 2019-12-23 16:21
  * descption:
  */
-open class RoundedCornersLayout : FrameLayout {
+open class RoundedCornersLayout : NestedScrollableHost {
     private var topLeftRadius = 0f
     private var topRightRadius = 0f
     private var bottomLeftRadius = 0f
