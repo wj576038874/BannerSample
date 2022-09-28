@@ -623,7 +623,7 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
     /**------------------------------------------Lifecycle------------------------------------------**/
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        if (attachedToWindow){
+        if (attachedToWindow && isAutoPlay()){
             bannerTimerHandler?.startTimer()
         }
     }
