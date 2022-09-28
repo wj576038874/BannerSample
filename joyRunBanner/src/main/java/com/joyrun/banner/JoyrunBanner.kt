@@ -6,8 +6,11 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +25,7 @@ import java.lang.reflect.InvocationTargetException
  * date: 2019-12-19 14:21
  * descption:
  */
-class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListener {
+class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListener , DefaultLifecycleObserver {
 
     private val mContext: Context
 
@@ -74,6 +77,8 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
     private val viewPager2: ViewPager2
 
     private var indicatorView: IndicatorView? = null
+
+    private var attachedToWindow = true
 
     constructor(context: Context) : this(context, null)
 
@@ -259,8 +264,9 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
         viewPager2.setCurrentItem(position, smoothScroll)
     }
 
-    fun setOffscreenPageLimit(limit: Int) {
+    fun setOffscreenPageLimit(limit: Int) : JoyrunBanner{
         viewPager2.offscreenPageLimit = limit
+        return this
     }
 
     /**
@@ -289,8 +295,9 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
      * 设置滑动监听事件
      * java
      */
-    fun setOnBannerChangeListener(onBannerChangeListener: ViewPager2.OnPageChangeCallback) {
+    fun setOnBannerChangeListener(onBannerChangeListener: ViewPager2.OnPageChangeCallback) : JoyrunBanner {
         this.mOnPageChangeListener = onBannerChangeListener
+        return this
     }
 
 
@@ -380,6 +387,7 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        attachedToWindow = false
         if (isAutoPlay()) {
             bannerTimerHandler?.stopTimer()
         }
@@ -387,28 +395,16 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        attachedToWindow = true
         if (isAutoPlay()) {
             bannerTimerHandler?.startTimer()
-        }
-    }
-
-    override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        super.onVisibilityChanged(changedView, visibility)
-        if (visibility == View.VISIBLE) {
-            if (isAutoPlay()) {
-                bannerTimerHandler?.startTimer()
-            }
-        } else {
-            if (isAutoPlay()) {
-                bannerTimerHandler?.stopTimer()
-            }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun changed() {
         bannerAdapterWrapper?.let {
-            viewPager2.adapter = it
+//            viewPager2.adapter = it
             if (enableLoop) {
                 val item = it.itemCount / 2
                 viewPager2.setCurrentItem(item, false)
@@ -623,5 +619,24 @@ class JoyrunBanner : RoundedCornersLayout, BannerTimerHandler.TimerHandlerListen
         }
     }
 
+
+    /**------------------------------------------Lifecycle------------------------------------------**/
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        if (attachedToWindow){
+            bannerTimerHandler?.startTimer()
+        }
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        bannerTimerHandler?.stopTimer()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        bannerTimerHandler?.stopTimer()
+        viewPager2.unregisterOnPageChangeCallback(mOnPageChangeCallback)
+    }
 }
 

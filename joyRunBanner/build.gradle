@@ -28,10 +28,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
     testCompileOnly 'junit:junit:4.12'
     compileOnly "androidx.recyclerview:recyclerview:1.1.0"
     androidTestCompileOnly 'androidx.test.ext:junit:1.1.1'
-    api "androidx.viewpager2:viewpager2:1.0.0"
+    compileOnly "androidx.viewpager2:viewpager2:1.0.0"
+    compileOnly "androidx.lifecycle:lifecycle-common:2.4.0"
     androidTestCompileOnly 'androidx.test.espresso:espresso-core:3.2.0'
 }
